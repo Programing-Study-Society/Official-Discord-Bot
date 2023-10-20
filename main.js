@@ -8,10 +8,12 @@ const {
 const config = require('./config.json')
 
 // modules
-const info_theory = require('./modules/information_theory');
-const translation = require('./modules/translation');
+const infoTheory = require('./modules/information_theory');
+const translation = require('./modules/translation')
+const logEliminationFile = require('./command/log-deletion.js');
+const logDeletionAllFile = require('./command/log-deletion-all.js');
 
-const modules = [info_theory,translation];
+const modules = [infoTheory,translation, logEliminationFile, logDeletionAllFile];
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers]
@@ -48,7 +50,7 @@ client.on(Events.InteractionCreate, async interaction => {
             }
         }
     });
-    if(flag == 0)
+    if(flag === 0)
         console.error(`${interaction.commandName}というコマンドには対応していません。`);
 });
 
@@ -124,27 +126,27 @@ async function sentenceSendAndReceive(inputSentence, message)
 }
 
 // スラッシュコマンド
-client.on(Events.InteractionCreate, async interaction => {
+// client.on(Events.InteractionCreate, async interaction => {
 
-    // スラッシュ以外のコマンドは終了
-    // コマンドにスラッシュが使われているかどうかisChatInputCommand()で判断
-    if (!interaction.isChatInputCommand()) return;
+//     // スラッシュ以外のコマンドは終了
+//     // コマンドにスラッシュが使われているかどうかisChatInputCommand()で判断
+//     if (!interaction.isChatInputCommand()) return;
 
-    // logEliminationコマンドに対する処理
-    if (interaction.commandName === logEliminationFile.data.name) {
-        try {
-            await logEliminationFile.execute(interaction);
-        } catch (error) {
-            console.error(error);
-            if (interaction.replied || interaction.deferred) {
-                await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-            } else {
-                await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-            }
-        }
-    }
-	else console.error(`${interaction.commandName}というコマンドには対応していません。`);
-});
+//     // logEliminationコマンドに対する処理
+//     if (interaction.commandName === logEliminationFile.data.name) {
+//         try {
+//             await logEliminationFile.execute(interaction);
+//         } catch (error) {
+//             console.error(error);
+//             if (interaction.replied || interaction.deferred) {
+//                 await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+//             } else {
+//                 await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+//             }
+//         }
+//     }
+// 	else console.error(`${interaction.commandName}というコマンドには対応していません。`);
+// });
 
 
 client.login(config.prkn_token) 
