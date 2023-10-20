@@ -125,28 +125,5 @@ async function sentenceSendAndReceive(inputSentence, message)
 	msg.reply(replySentence);
 }
 
-// スラッシュコマンド
-// client.on(Events.InteractionCreate, async interaction => {
-
-//     // スラッシュ以外のコマンドは終了
-//     // コマンドにスラッシュが使われているかどうかisChatInputCommand()で判断
-//     if (!interaction.isChatInputCommand()) return;
-
-//     // logEliminationコマンドに対する処理
-//     if (interaction.commandName === logEliminationFile.data.name) {
-//         try {
-//             await logEliminationFile.execute(interaction);
-//         } catch (error) {
-//             console.error(error);
-//             if (interaction.replied || interaction.deferred) {
-//                 await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-//             } else {
-//                 await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-//             }
-//         }
-//     }
-// 	else console.error(`${interaction.commandName}というコマンドには対応していません。`);
-// });
-
 
 client.login(config.prkn_token) 
