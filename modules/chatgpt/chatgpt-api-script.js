@@ -26,7 +26,7 @@ function addToDictionary(key, role, value) {
     messages[key].push({role: role, content: value});
   }
 
-  if(messages[key].length > 3) // 往復分 + 今の会話を超えたら
+  if(messages[key].length > 5) // 2往復分 + 今の会話を超えたら
   {
     messages[key].shift()// 先頭から1番目を削除
   }
