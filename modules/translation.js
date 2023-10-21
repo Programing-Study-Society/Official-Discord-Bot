@@ -7,7 +7,8 @@ const {
     EmbedBuilder,
 } = require('discord.js')
 
-const fetch = require('node-fetch-commonjs')
+const fetch = require('node-fetch-commonjs');
+const config = require('../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -49,7 +50,7 @@ module.exports = {
                         method: "POST"
                     }
                     let URL = "https://api-free.deepl.com/v2/translate"
-                    URL += "?auth_key=c0d8d581-03d3-2e33-134d-7328a9757f0f:fx"
+                    URL += "?auth_key="+config.deepl_token
                     URL += "&text="+text
                     URL += lang
                     await fetch(URL,param)

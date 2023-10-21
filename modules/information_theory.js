@@ -77,8 +77,10 @@ module.exports = {
     }
 }
 
-function hankaku2Zenkaku(str) {
-    return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
-        return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
-    });
-}
+// 全角から半角へ変換する関数
+// 要素数が不要なので多分不要
+// function hankaku2Zenkaku(str) {
+//     return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
+//         return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+//     });
+// }
