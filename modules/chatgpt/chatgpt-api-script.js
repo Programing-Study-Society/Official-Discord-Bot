@@ -36,6 +36,7 @@ function addToDictionary(key, role, value) {
 exports.logDeletionThisChannel = function(key)
 {
   // 配列の要素を全削除する
+  console.log(key);
   delete messages[key];
   console.log("\nこのチャンネルのChatGPTとの会話ログを削除しました");
 }
