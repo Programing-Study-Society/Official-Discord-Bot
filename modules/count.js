@@ -12,11 +12,11 @@ const config = require('../config.json');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('文字数カウント')
-        .setDescription('2000文字までカウントできます。'),
+        .setDescription('文字数カウントできます。'),
     async execute(interaction){
         const modal = new ModalBuilder()
         .setCustomId('count')  
-        .setTitle('文字数カウント(2000文字までカウントできます)');
+        .setTitle('文字数カウント');
         
         const text = new TextInputBuilder()
             .setCustomId('text')
