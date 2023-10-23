@@ -2,7 +2,7 @@
 const { REST, Routes } = require('discord.js');
 
 // module.exportsを呼び出します。
-const nouritu = require('../modules/nouritu.js');
+const nouritu = require('../modules/information_theory.js');
 const trans = require('../modules/translation.js');
 
 // 環境変数としてapplicationId, guildId, tokenの3つが必要です
