@@ -10,10 +10,11 @@ const config = require('./config.json')
 // modules
 const infoTheory = require('./modules/information_theory');
 const translation = require('./modules/translation')
+const count = require('./modules/count');
 const logEliminationFile = require('./command/log-deletion.js');
 const logDeletionAllFile = require('./command/log-deletion-all.js');
 
-const modules = [infoTheory,translation, logEliminationFile, logDeletionAllFile];
+const modules = [infoTheory, translation, count, logEliminationFile, logDeletionAllFile];
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers]
