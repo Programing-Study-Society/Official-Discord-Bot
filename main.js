@@ -7,18 +7,19 @@ const {
 
 const config = require('./config.json')
 
-// modules
-const infoTheory = require('./modules/information_theory');
-const translation = require('./modules/translation')
-const count = require('./modules/count');
-const logEliminationFile = require('./command/log-deletion.js');
-const logDeletionAllFile = require('./command/log-deletion-all.js');
+const modules = [
+	require('./modules/information_theory'), 
+	require('./modules/translation'), 
+	require('./modules/count'), 
+	require('./command/log-deletion.js'), 
+	require('./command/log-deletion-all.js')
+];
 
-const modules = [infoTheory, translation, count, logEliminationFile, logDeletionAllFile];
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers]
 });
+
 
 client.on('ready', () => {
     console.log('-------------------------------');
@@ -32,13 +33,12 @@ client.on('ready', () => {
       })
 })
 
-client.on(Events.InteractionCreate, async interaction => {
+
+client.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isChatInputCommand()) return;
-    let flag = 0;
     // 各コマンドに対する処理
     modules.forEach( async (ele) => {
         if (interaction.commandName === ele.data.name) {
-            flag++;
             try {
                 await ele.execute(interaction);
             } catch (error) {
@@ -51,8 +51,6 @@ client.on(Events.InteractionCreate, async interaction => {
             }
         }
     });
-    if(flag === 0)
-        console.error(`${interaction.commandName}というコマンドには対応していません。`);
 });
 
 
