@@ -8,7 +8,9 @@ const {
 const config = require('./config.json')
 
 const modules = [
-	require('./modules/information_theory'), 
+	require('./modules/infomation-theory/efficiency'), 
+	require('./modules/infomation-theory/entropy'), 
+	require('./modules/infomation-theory/mean-sign-length'), 
 	require('./modules/translation'), 
 	require('./modules/count'), 
 	require('./command/log-deletion.js'), 
