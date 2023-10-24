@@ -8,21 +8,24 @@ const {
 } = require('discord.js');
 
 
-const {meanSignLength} = require('./mean-sign-length');
-const {entropy} = require('./entropy');
+const meanSignLengthFile = require('./mean-sign-length');
+const entropyFile = require('./entropy');
 
 
-module.exports.efficiency = (codesLength, probabilities) => {
-    const meanSignLengthValue = meanSignLength(codesLength, probabilities);
-    const entropyValue = entropy(probabilities);
-    return entropyValue / meanSignLengthValue;
-};
+module.exports.efficiency = 
 
 
 module.exports = {
+    efficiency: (codesLength, probabilities) => {
+        const meanSignLengthValue = meanSignLengthFile.meanSignLength(codesLength, probabilities);
+        const entropyValue = entropyFile.entropy(probabilities);
+        return entropyValue / meanSignLengthValue;
+    },
+
     data: new SlashCommandBuilder()
         .setName('info-efficiency')
         .setDescription('能率の計算'),
+
     execute: async (interaction) => {
         const modal = new ModalBuilder()
             .setCustomId('info-efficiency')  
@@ -44,7 +47,7 @@ module.exports = {
         );
         
         await interaction.showModal(modal);
-        const filter = (mInteraction) => mInteraction.customId === 'efficiency';
+        const filter = (mInteraction) => mInteraction.customId === 'info-efficiency';
         interaction.awaitModalSubmit({ filter, time: 600000 })
             .then(async (mInteraction) => {
                 const inputProbabilities = mInteraction.fields.getTextInputValue('probabilities');
@@ -70,9 +73,9 @@ module.exports = {
                     }
                 });
 
-                const meanSignLengthValue = meanSignLength(codesLength, probabilities);
-                const entropyValue = entropy(probabilities);
-                const efficiencyValue = this.efficiency(codesLength, probabilities);
+                const meanSignLengthValue = meanSignLengthFile.meanSignLength(codesLength, probabilities);
+                const entropyValue = entropyFile.entropy(probabilities);
+                const efficiencyValue = module.exports.efficiency(codesLength, probabilities);
                 
                 if(
                     entropyValue === 0 || meanSignLengthValue === 0 || efficiencyValue === 0 || 

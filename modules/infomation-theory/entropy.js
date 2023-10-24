@@ -8,20 +8,20 @@ const {
 } = require('discord.js');
 
 
-module.exports.entropy = (probabilities) => {
-    let ent = 0.0;
-    for(let i = 0; i < probabilities.length; i++) {
-        if (probabilities[i] === NaN) return NaN;
-        ent -= probabilities[i] * Math.log2(probabilities[i]);
-    }
-    return ent;
-}
-
-
 module.exports = {
+    entropy: (probabilities) => {
+        let ent = 0.0;
+        for(let i = 0; i < probabilities.length; i++) {
+            if (probabilities[i] === NaN) return NaN;
+            ent -= probabilities[i] * Math.log2(probabilities[i]);
+        }
+        return ent;
+    },
+
     data: new SlashCommandBuilder()
         .setName('info-entropy')
         .setDescription('エントロピーの計算'),
+
     execute: async (interaction) => {
         const modal = new ModalBuilder()
             .setCustomId('info-entropy')

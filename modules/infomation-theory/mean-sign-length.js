@@ -8,20 +8,21 @@ const {
 } = require('discord.js');
 
 
-module.exports.meanSignLength = (codesLength, probabilities) => {
-    let elementsLength = probabilities.length;
-    let L = 0.0;
-    for(let i = 0;i < elementsLength; i++){
-        if (probabilities[i] === NaN) return NaN;
-        L += codesLength[i] * probabilities[i];
-    }
-    return L;
-}
-
 module.exports = {
+    meanSignLength: (codesLength, probabilities) => {
+        let elementsLength = probabilities.length;
+        let L = 0.0;
+        for(let i = 0;i < elementsLength; i++){
+            if (probabilities[i] === NaN) return NaN;
+            L += codesLength[i] * probabilities[i];
+        }
+        return L;
+    },
+
     data: new SlashCommandBuilder()
         .setName('info-meansignlength')
         .setDescription('平均符号長の計算'),
+
     execute: async (interaction) => {
         const modal = new ModalBuilder()
             .setCustomId('info-meansignlength')  
