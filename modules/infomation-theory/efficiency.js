@@ -8,14 +8,28 @@ const {
 } = require('discord.js');
 
 
+const meanSignLengthFile = require('./mean-sign-length');
+const entropyFile = require('./entropy');
+
+
+module.exports.efficiency = 
+
+
 module.exports = {
+    efficiency: (codesLength, probabilities) => {
+        const meanSignLengthValue = meanSignLengthFile.meanSignLength(codesLength, probabilities);
+        const entropyValue = entropyFile.entropy(probabilities);
+        return entropyValue / meanSignLengthValue;
+    },
+
     data: new SlashCommandBuilder()
-        .setName('efficiency')
+        .setName('info-efficiency')
         .setDescription('能率の計算'),
+
     execute: async (interaction) => {
         const modal = new ModalBuilder()
-            .setCustomId('efficiency')  
-            .setTitle('能率e(半角で入力してください)');
+            .setCustomId('info-efficiency')  
+            .setTitle('能率を求めます');
     
         const probabilitiesForm = new TextInputBuilder()
             .setCustomId('probabilities')
@@ -33,17 +47,14 @@ module.exports = {
         );
         
         await interaction.showModal(modal);
-        const filter = (mInteraction) => mInteraction.customId === 'efficiency';
+        const filter = (mInteraction) => mInteraction.customId === 'info-efficiency';
         interaction.awaitModalSubmit({ filter, time: 600000 })
             .then(async (mInteraction) => {
                 const inputProbabilities = mInteraction.fields.getTextInputValue('probabilities');
                 const inputCodesLength = mInteraction.fields.getTextInputValue('codes-length');
         
-                let probabilities = inputProbabilities.split(/\s{0},/);
-                let codesLength = inputCodesLength.split(/\s{0},/);
-        
-                let L = 0;
-                let entropy = 0; 
+                let probabilities = inputProbabilities.split(/,\s{0,}/);
+                let codesLength = inputCodesLength.split(/,\s{0,}/);
 
                 if(probabilities.length != codesLength.length){
                     return mInteraction.reply({
@@ -52,20 +63,23 @@ module.exports = {
                     });
                 }
 
-                elementsLength = probabilities.length;
+                probabilities = probabilities.map((ele) => {
+                    if(ele.match(/^[0-9]{1,}\/[0-9]{1,}$/)){
+                        return Number(ele.split(/\//)[0]) / Number(ele.split(/\//)[1]);
+                    } else if (ele.match(/^[0-9]{1,}.[0-9]{1,}$/)) {
+                        return Number(ele);
+                    } else {
+                        return NaN;
+                    }
+                });
 
-                for(i = 0;i < elementsLength;i++){
-                    try{
-                        if(probabilities[i].match(/[0-9]{0,}\/[0-9]{0,}/)){
-                            probabilities[i] = probabilities[i].split(/\//)[0] / probabilities[i].split(/\//)[1];
-                        }
-                    }catch(error){}
-                    entropy += probabilities[i] * Math.log2(probabilities[i]);
-                    L += codesLength[i] * probabilities[i];
-                }
-                entropy *= -1;
-        
-                if(entropy == 0 || L == 0 || entropy / L == 0 || entropy == NaN || L == NaN || entropy / L == NaN){
+                const meanSignLengthValue = meanSignLengthFile.meanSignLength(codesLength, probabilities);
+                const entropyValue = entropyFile.entropy(probabilities);
+                const efficiencyValue = module.exports.efficiency(codesLength, probabilities);
+                
+                if(
+                    entropyValue === 0 || meanSignLengthValue === 0 || efficiencyValue === 0 || 
+                    entropyValue === NaN || meanSignLengthValue === NaN || efficiencyValue === NaN){
                     return mInteraction.reply({ 
                         content: 'フォームに入力された値に不備があります。', 
                         ephemeral: true 
@@ -74,7 +88,7 @@ module.exports = {
                     return mInteraction.reply({
                         embeds: [
                             new EmbedBuilder()
-                                .setTitle(`エントロピー：${entropy}\n平均符号長：${L}\n能率e：${entropy/L}`)
+                                .setTitle(`能率e：${efficiencyValue}`)
                                 .setColor(7506394)
                         ]
                     });
