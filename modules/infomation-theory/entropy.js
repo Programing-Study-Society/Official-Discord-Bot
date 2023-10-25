@@ -54,7 +54,7 @@ module.exports = {
                     }
                 });
 
-                const entropyValue = this.entropy(probabilities);
+                const entropyValue = module.exports.entropy(probabilities);
                 
                 if( entropyValue == 0 || entropyValue == NaN ){
                     return mInteraction.reply({ 

@@ -70,7 +70,7 @@ module.exports = {
                     }
                 });
 
-                const meanSignLengthValue = this.meanSignLength(codesLength, probabilities);
+                const meanSignLengthValue = module.exports.meanSignLength(codesLength, probabilities);
                 
                 if( meanSignLengthValue == 0 || meanSignLengthValue == NaN ){
                     return mInteraction.reply({ 
