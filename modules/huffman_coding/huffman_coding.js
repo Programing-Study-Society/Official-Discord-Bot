@@ -1,3 +1,6 @@
+// 入力：符号名(char), 確率(freq)の入った配列
+// 出力：符号名(char), 符号語(code)の入った配列, 能率
+
 // ノードを表すクラス
 class Node {
   constructor(char, freq) {
@@ -10,6 +13,7 @@ class Node {
 
 // ハフマンツリーを構築する関数
 function buildHuffmanTree(data) {
+
   // プライオリティキューを初期化し、文字と確率を持つノードを追加
   const priorityQueue = data.map(item => new Node(item.char, item.freq));
 
@@ -65,8 +69,14 @@ function generateHuffmanCodes(root) {
 }
 
 // ハフマン符号化を行う関数
-function huffmanCoding()
+function huffmanCoding(signNames, freqs)
 {
+  // data配列を作成
+  const data = [];
+  for (let i = 0; i < signNames.length && i < freqs.length; i++) {
+    const node = new Node(signNames[i], freqs[i]);
+    data.push(node);
+  }
   // ハフマンツリーを構築し、ハフマン符号を生成
   const huffmanTree = buildHuffmanTree(data);
   const huffmanCodes = generateHuffmanCodes(huffmanTree);
@@ -81,21 +91,42 @@ function huffmanCoding()
   });
 
   // ハフマン符号を返す
+  
   return sortArr;
 }
 
+function efficiencyForHuffmanCoding(houffman, freqs)
+{
+  const codesLength = houffman.map((ele) => {
+    return ele.code.length;
+  })
+
+  const {efficiency} = require('../infomation-theory/efficiency');
+  const eff = efficiency(codesLength, freqs);
+  return eff;
+}
 
 
 // テスト(実行部分)
 // テストデータ - 文字と確率の配列
-const data = [
-  { char: 'A1', freq: 0.09 },
-  { char: 'A2', freq: 0.14 },
-  { char: 'A3', freq: 0.40 },
-  { char: 'A4', freq: 0.15 },
-  { char: 'A5', freq: 0.11 },
-  { char: 'A6', freq: 0.11 },
-];
+const signNames = [
+  'A1',
+  'A2',
+  'A3',
+  'A4',
+  'A5',
+  'A6',
+]
+const freqs = [
+  0.09,
+  0.14,
+  0.40,
+  0.15,
+  0.11,
+  0.11,
+]
 
-const ans = huffmanCoding(data);
+const ans = huffmanCoding(signNames, freqs);
 console.log("ハフマン符号:", ans);
+const eff = efficiencyForHuffmanCoding(ans,freqs);
+console.log("能率:", eff);
