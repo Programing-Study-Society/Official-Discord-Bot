@@ -101,7 +101,7 @@ module.exports = {
     },
 
     data: new SlashCommandBuilder()
-        .setName('info-huffman_coding')
+        .setName('info huffman_coding')
         .setDescription('ハフマン符号化'),
     
     execute: async (interaction) => {
