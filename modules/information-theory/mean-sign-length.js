@@ -10,22 +10,33 @@ const {
 
 module.exports = {
     meanSignLength: (codesLength, probabilities) => {
-        let elementsLength = probabilities.length;
+        
+        const filterBy1 = probabilities.filter(ele => ele === 1);
+        const filterBy0 = probabilities.filter(ele => ele === 0);
+
+        // 完全事象系以外を除外
+        let sum = 0;
+        for(let i = 0; i < probabilities.length; i++) {
+            sum += probabilities[i];
+        }
+
+        if (sum !== 1) return NaN;
+        if ((filterBy0.length > 0 && filterBy1.length !== 1) || filterBy0.length > 1) return NaN;
+
         let L = 0.0;
-        for(let i = 0;i < elementsLength; i++){
-            if (probabilities[i] === NaN) return NaN;
+        for(let i = 0;i < probabilities.length; i++){
             L += codesLength[i] * probabilities[i];
         }
         return L;
     },
 
     data: new SlashCommandBuilder()
-        .setName('info-meansignlength')
+        .setName('info-mean_sign_length')
         .setDescription('平均符号長の計算'),
 
     execute: async (interaction) => {
         const modal = new ModalBuilder()
-            .setCustomId('info-meansignlength')  
+            .setCustomId('infomeansignlength')  
             .setTitle('平均符号長を求めます');
     
         const probabilitiesForm = new TextInputBuilder()
@@ -63,16 +74,23 @@ module.exports = {
                 probabilities = probabilities.map((ele) => {
                     if(ele.match(/^[0-9]{1,}\/[0-9]{1,}$/)){
                         return Number(ele.split(/\//)[0]) / Number(ele.split(/\//)[1]);
-                    } else if (ele.match(/^[0-9]{1,}.[0-9]{1,}$/)) {
+                    } else if (ele.match(/^[0-9]{1,}.[0-9]{1,}$/) || ele === '0' || ele === '1') {
                         return Number(ele);
                     } else {
                         return NaN;
                     }
                 });
 
+                if (probabilities.includes(NaN)) {
+                    return mInteraction.reply({ 
+                        content: 'フォームに入力された値に不備があります。', 
+                        ephemeral: true 
+                    });
+                }
+
                 const meanSignLengthValue = module.exports.meanSignLength(codesLength, probabilities);
                 
-                if( meanSignLengthValue == 0 || meanSignLengthValue == NaN ){
+                if( meanSignLengthValue == 0 || isNaN(meanSignLengthValue) ){
                     return mInteraction.reply({ 
                         content: 'フォームに入力された値に不備があります。', 
                         ephemeral: true 

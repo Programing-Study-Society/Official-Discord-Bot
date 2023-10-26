@@ -140,7 +140,7 @@ module.exports = {
                 return mInteraction.reply({
                     embeds: [
                         new EmbedBuilder()
-                            .setTitle(`ハフマン符号語：\n${shannonFanoString}`)
+                            .setTitle(`シャノン・ファノ符号語：\n${shannonFanoString}`)
                             .setColor(7506394),
                         new EmbedBuilder()
                             .setTitle(`能率e：${efficiencyValue}`)

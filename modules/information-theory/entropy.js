@@ -10,10 +10,29 @@ const {
 
 module.exports = {
     entropy: (probabilities) => {
+        
+        const filterBy1 = probabilities.filter(ele => ele === 1);
+        const filterBy0 = probabilities.filter(ele => ele === 0);
+
+        // 完全事象系以外を除外
+        let sum = 0;
+        for(let i = 0; i < probabilities.length; i++) {
+            sum += probabilities[i];
+        }
+        if (sum !== 1) return NaN;
+        
+        // 確率が0を含む場合
+        if (filterBy0.length > 0) {
+            if (filterBy1.length === 1 && filterBy0.length === 1) {
+                return 0;
+            } else {
+                return NaN;
+            }
+        }
+
         let ent = 0.0;
         for(let i = 0; i < probabilities.length; i++) {
-            if (probabilities[i] === NaN) return NaN;
-            ent -= probabilities[i] * Math.log2(probabilities[i]);
+            ent -= (probabilities[i] * Math.log2(probabilities[i]));
         }
         return ent;
     },
@@ -25,7 +44,7 @@ module.exports = {
     execute: async (interaction) => {
         const modal = new ModalBuilder()
             .setCustomId('info-entropy')
-            .setTitle('平均符号長を求めます');
+            .setTitle('エントロピーを求めます');
     
         const probabilitiesForm = new TextInputBuilder()
             .setCustomId('probabilities')
@@ -47,16 +66,25 @@ module.exports = {
                 probabilities = probabilities.map((ele) => {
                     if(ele.match(/^[0-9]{1,}\/[0-9]{1,}$/)){
                         return Number(ele.split(/\//)[0]) / Number(ele.split(/\//)[1]);
-                    } else if (ele.match(/^[0-9]{1,}.[0-9]{1,}$/)) {
+                    } else if (ele.match(/^[0-9]{1,}.[0-9]{1,}$/) || ele === '0' || ele === '1') {
                         return Number(ele);
                     } else {
                         return NaN;
                     }
                 });
 
+                if (probabilities.includes(NaN)) {
+                    return mInteraction.reply({ 
+                        content: 'フォームに入力された値に不備があります。', 
+                        ephemeral: true 
+                    });
+                }
+
+                if (typeof probabilities === 'number') probabilities = [probabilities];
+
                 const entropyValue = module.exports.entropy(probabilities);
                 
-                if( entropyValue == 0 || entropyValue == NaN ){
+                if( isNaN(entropyValue) ){
                     return mInteraction.reply({ 
                         content: 'フォームに入力された値に不備があります。', 
                         ephemeral: true 

@@ -12,13 +12,11 @@ const meanSignLengthFile = require('./mean-sign-length');
 const entropyFile = require('./entropy');
 
 
-module.exports.efficiency = 
-
-
 module.exports = {
     efficiency: (codesLength, probabilities) => {
         const meanSignLengthValue = meanSignLengthFile.meanSignLength(codesLength, probabilities);
         const entropyValue = entropyFile.entropy(probabilities);
+        if (isNaN(meanSignLengthValue) || meanSignLengthValue === 0 || isNaN(entropyValue)) return NaN;
         return entropyValue / meanSignLengthValue;
     },
 
@@ -66,20 +64,23 @@ module.exports = {
                 probabilities = probabilities.map((ele) => {
                     if(ele.match(/^[0-9]{1,}\/[0-9]{1,}$/)){
                         return Number(ele.split(/\//)[0]) / Number(ele.split(/\//)[1]);
-                    } else if (ele.match(/^[0-9]{1,}.[0-9]{1,}$/)) {
+                    } else if (ele.match(/^[0-9]{1,}.[0-9]{1,}$/) || ele === '0' || ele === '1') {
                         return Number(ele);
                     } else {
                         return NaN;
                     }
                 });
 
-                const meanSignLengthValue = meanSignLengthFile.meanSignLength(codesLength, probabilities);
-                const entropyValue = entropyFile.entropy(probabilities);
+                if (probabilities.includes(NaN)) {
+                    return mInteraction.reply({ 
+                        content: 'フォームに入力された値に不備があります。', 
+                        ephemeral: true 
+                    });
+                }
+
                 const efficiencyValue = module.exports.efficiency(codesLength, probabilities);
                 
-                if(
-                    entropyValue === 0 || meanSignLengthValue === 0 || efficiencyValue === 0 || 
-                    entropyValue === NaN || meanSignLengthValue === NaN || efficiencyValue === NaN){
+                if(isNaN(efficiencyValue)){
                     return mInteraction.reply({ 
                         content: 'フォームに入力された値に不備があります。', 
                         ephemeral: true 
