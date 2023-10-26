@@ -7,12 +7,13 @@ const commands = [
     require('../modules/information-theory/efficiency').data.toJSON(), 
     require('../modules/information-theory/entropy').data.toJSON(), 
     require('../modules/information-theory/mean-sign-length').data.toJSON(), 
+    require('../modules/information-theory/huffman-coding').data.toJSON(), 
+    require('../modules/information-theory/shannon_fano-coding').data.toJSON(), 
     require('../modules/translation.js').data.toJSON(), 
     require('../modules/count.js').data.toJSON(), 
     require('./log-deletion.js').data.toJSON(), 
     require('./log-deletion-all.js').data.toJSON()
 ];
-
 
 
 // 環境変数としてapplicationId, guildId, tokenの3つが必要です

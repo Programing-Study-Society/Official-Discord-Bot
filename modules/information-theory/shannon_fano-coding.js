@@ -1,3 +1,14 @@
+const { 
+  ActionRowBuilder,
+  SlashCommandBuilder,
+  TextInputStyle,
+  ModalBuilder,
+  TextInputBuilder,
+  EmbedBuilder,
+} = require('discord.js');
+
+const {efficiency} = require('./efficiency');
+
 // シャノン・ファノ符号化のためのノードオブジェクト
 class Node {
     constructor(char, probability) {
@@ -58,6 +69,87 @@ module.exports = {
   
     // 結果を整列されたセットの配列にして返す
     return sortedData.map(node => ({ char: node.char, code: node.code }));
+  },
+
+  data: new SlashCommandBuilder()
+  .setName('info-coding-shannon_fano')
+  .setDescription('シャノン・ファノ符号化'),
+
+  execute: async (interaction) => {
+    const modal = new ModalBuilder()
+        .setCustomId('info-shannon_fano-coding')  
+        .setTitle('シャノン・ファノ符号化を行います');
+
+    const signNamesForm = new TextInputBuilder()
+        .setCustomId('signNames')
+        .setLabel("各符号名 ( 半角数字 ,区切り ) 例：A1,A2,A3")
+        .setStyle(TextInputStyle.Short);
+
+    const probabilitiesForm = new TextInputBuilder()
+        .setCustomId('probabilities')
+        .setLabel("各事象の確率 ( 半角数字 ,区切り )")
+        .setStyle(TextInputStyle.Short);
+    
+    modal.addComponents(
+        new ActionRowBuilder().addComponents(signNamesForm),
+        new ActionRowBuilder().addComponents(probabilitiesForm),
+    )
+    
+    await interaction.showModal(modal);
+    const filter = (mInteraction) => mInteraction.customId === 'info-shannon_fano-coding';
+    interaction.awaitModalSubmit({ filter, time: 600000 })
+        .then(async (mInteraction) => {
+            const inputSignNames = mInteraction.fields.getTextInputValue('signNames');
+            const inputProbabilities = mInteraction.fields.getTextInputValue('probabilities');
+    
+            let signNames = inputSignNames.split(/,\s{0,}/);
+            let probabilities = inputProbabilities.split(/,\s{0,}/);
+
+            if(signNames.length != probabilities.length){
+                return mInteraction.reply({
+                    content: 'フォームに入力された値に不備があります。',
+                    ephemeral: true 
+                });
+            }
+
+            probabilities = probabilities.map((ele) => {
+                if(ele.match(/^[0-9]{1,}\/[0-9]{1,}$/)){
+                    return Number(ele.split(/\//)[0]) / Number(ele.split(/\//)[1]);
+                } else if (ele.match(/^[0-9]{1,}.[0-9]{1,}$/)) {
+                    return Number(ele);
+                } else {
+                    return NaN;
+                }
+            });
+
+            const shannonFanoCodesValue = module.exports.shannonFanoCodin(signNames, probabilities); // シャノン・ファノ符号語を求める
+            const shannonFanoCodesArray = shannonFanoCodesValue.map(item => `${item.char}: ${item.code}`); // シャノン・ファノ符号語をstr型に変換
+            const shannonFanoString = shannonFanoCodesArray.join('\n'); // ,を\nに変換
+            const codesLength = shannonFanoCodesValue.map((ele) => { // 符号長を計算
+                return ele.code.length;
+            })
+            const efficiencyValue = efficiency(codesLength ,probabilities); // 能率を求める
+            
+            if(
+                efficiencyValue === 0 || efficiencyValue === NaN){
+                return mInteraction.reply({ 
+                    content: 'フォームに入力された値に不備があります。', 
+                    ephemeral: true 
+                });
+            }else{
+                return mInteraction.reply({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setTitle(`ハフマン符号語：\n${shannonFanoString}`)
+                            .setColor(7506394),
+                        new EmbedBuilder()
+                            .setTitle(`能率e：${efficiencyValue}`)
+                            .setColor(7506394)
+                    ]
+                });
+            }
+        })
+        .catch(console.error);
   }
 }
 
