@@ -11,6 +11,8 @@ const modules = [
 	require('./modules/information-theory/efficiency'), 
 	require('./modules/information-theory/entropy'), 
 	require('./modules/information-theory/mean-sign-length'), 
+    require('./modules/information-theory/huffman-coding'), 
+    require('./modules/information-theory/shannon_fano-coding'), 
 	require('./modules/translation'), 
 	require('./modules/count'), 
 	require('./command/log-deletion.js'), 

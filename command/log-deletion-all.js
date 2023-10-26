@@ -9,6 +9,6 @@ module.exports = {
 		.setDescription('全てのチャンネルに保存されているChatGPTとの会話記録を削除します'),
 	execute: async function(interaction) {
 		await chatGPTAPIScript.logDeletionAll();
-		await interaction.reply('全てのChatGPTとの会話ログを削除しました');
+		await interaction.reply('全チャンネルのChatGPTとの会話ログを削除しました');
 	},
 };
