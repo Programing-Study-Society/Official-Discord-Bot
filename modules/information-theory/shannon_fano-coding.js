@@ -72,7 +72,7 @@ module.exports = {
   },
 
   data: new SlashCommandBuilder()
-  .setName('info shannon-fano-coding')
+  .setName('info-coding-shannon_fano')
   .setDescription('シャノン・ファノ符号化'),
 
   execute: async (interaction) => {
