@@ -68,7 +68,7 @@ module.exports = {
   //     return ele.code.length;
   //   })
 
-  //   const {efficiency} = require('../infomation-theory/efficiency');
+  //   const {efficiency} = require('../information-theory/efficiency');
   //   const eff = efficiency(codesLength, freqs);
   //   return eff;
   // }

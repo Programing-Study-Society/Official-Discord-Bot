@@ -4,9 +4,9 @@ const { REST, Routes } = require('discord.js');
 
 // 登録コマンドを呼び出してリスト形式で登録
 const commands = [
-    require('../modules/infomation-theory/efficiency').data.toJSON(), 
-    require('../modules/infomation-theory/entropy').data.toJSON(), 
-    require('../modules/infomation-theory/mean-sign-length').data.toJSON(), 
+    require('../modules/information-theory/efficiency').data.toJSON(), 
+    require('../modules/information-theory/entropy').data.toJSON(), 
+    require('../modules/information-theory/mean-sign-length').data.toJSON(), 
     require('../modules/translation.js').data.toJSON(), 
     require('../modules/count.js').data.toJSON(), 
     require('./log-deletion.js').data.toJSON(), 
