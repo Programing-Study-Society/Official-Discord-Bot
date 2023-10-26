@@ -69,69 +69,70 @@ function generateHuffmanCodes(root) {
 }
 
 // ハフマン符号化を行う関数
-function huffmanCoding(signNames, freqs)
-{
-  // data配列を作成
-  const data = [];
-  for (let i = 0; i < signNames.length && i < freqs.length; i++) {
-    const node = new Node(signNames[i], freqs[i]);
-    data.push(node);
-  }
-  // ハフマンツリーを構築し、ハフマン符号を生成
-  const huffmanTree = buildHuffmanTree(data);
-  const huffmanCodes = generateHuffmanCodes(huffmanTree);
-
-  // data配列をループしてMapの値（charとfreq）をsortArr配列に追加
-  const sortArr = [];
-  data.forEach(item => {
-    const char = item.char;
-    if (huffmanCodes.has(char)) {
-      sortArr.push({ char, code: huffmanCodes.get(char) });
+module.exports = {
+  huffmanCodin: (signNames, freqs) => {
+      // data配列を作成
+      const data = [];
+      for (let i = 0; i < signNames.length && i < freqs.length; i++) {
+        const node = new Node(signNames[i], freqs[i]);
+        data.push(node);
+      }
+      // ハフマンツリーを構築し、ハフマン符号を生成
+      const huffmanTree = buildHuffmanTree(data);
+      const huffmanCodes = generateHuffmanCodes(huffmanTree);
+    
+      // data配列をループしてMapの値（charとfreq）をsortArr配列に追加
+      const sortArr = [];
+      data.forEach(item => {
+        const char = item.char;
+        if (huffmanCodes.has(char)) {
+          sortArr.push({ char, code: huffmanCodes.get(char) });
+        }
+      });
+    
+      // ハフマン符号を返す
+      
+      return sortArr;
     }
-  });
+}
 
-  // ハフマン符号を返す
+// ↓わざわざ関数化する必要が無いと判断したためコメントアウト
+// function efficiencyForHuffmanCoding(houffman, freqs)
+// {
+//   const codesLength = houffman.map((ele) => {
+//     return ele.code.length;
+//   })
+
+//   const eff = efficiency(codesLength, freqs);
+//   return eff;
+// }
+
+
+// // テスト(実行部分)
+// function test()
+// {
+//   // テストデータ - 文字と確率の配列
+//   const signNames = [
+//     'A1',
+//     'A2',
+//     'A3',
+//     'A4',
+//     'A5',
+//     'A6',
+//   ]
+//   const freqs = [
+//     0.09,
+//     0.14,
+//     0.40,
+//     0.15,
+//     0.11,
+//     0.11,
+//   ]
   
-  return sortArr;
-}
+//   const ans = huffmanCoding(signNames, freqs);
+//   console.log("ハフマン符号:", ans);
+//   const eff = efficiencyForHuffmanCoding(ans,freqs);
+//   console.log("能率:", eff);
+// }
 
-function efficiencyForHuffmanCoding(houffman, freqs)
-{
-  const codesLength = houffman.map((ele) => {
-    return ele.code.length;
-  })
-
-  const {efficiency} = require('../infomation-theory/efficiency');
-  const eff = efficiency(codesLength, freqs);
-  return eff;
-}
-
-
-// テスト(実行部分)
-function test()
-{
-  // テストデータ - 文字と確率の配列
-  const signNames = [
-    'A1',
-    'A2',
-    'A3',
-    'A4',
-    'A5',
-    'A6',
-  ]
-  const freqs = [
-    0.09,
-    0.14,
-    0.40,
-    0.15,
-    0.11,
-    0.11,
-  ]
-  
-  const ans = huffmanCoding(signNames, freqs);
-  console.log("ハフマン符号:", ans);
-  const eff = efficiencyForHuffmanCoding(ans,freqs);
-  console.log("能率:", eff);
-}
-
-test();
+// test();
