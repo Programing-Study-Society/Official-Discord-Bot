@@ -8,7 +8,8 @@ class Node {
   }
   
 // シャノン・ファノ符号化のメイン関数
-function shannonFano(signNames, freqs) {
+module.exports = {
+  shannonFanoCodin: (signNames, freqs) => {
 
     // data配列を作成
     const data = [];
@@ -58,47 +59,49 @@ function shannonFano(signNames, freqs) {
     // 結果を整列されたセットの配列にして返す
     return sortedData.map(node => ({ char: node.char, code: node.code }));
   }
+}
 
-  function efficiencyForShannonFanoCoding(shannonFanoman, freqs)
-  {
-    const codesLength = shannonFanoman.map((ele) => {
-      return ele.code.length;
-    })
+// ↓わざわざ関数化する必要が無いと判断したためコメントアウト
+  // function efficiencyForShannonFanoCoding(shannonFanoman, freqs)
+  // {
+  //   const codesLength = shannonFanoman.map((ele) => {
+  //     return ele.code.length;
+  //   })
 
-    const {efficiency} = require('../infomation-theory/efficiency');
-    const eff = efficiency(codesLength, freqs);
-    return eff;
-  }
+  //   const {efficiency} = require('../infomation-theory/efficiency');
+  //   const eff = efficiency(codesLength, freqs);
+  //   return eff;
+  // }
 
-  function test()
-  {
+  // function test()
+  // {
 
-    const signNames = [
-      'A1',
-      'A2',
-      'A3',
-      'A4',
-      'A5',
-      'A6',
-      'A7',
-      'A8',
-    ]
+  //   const signNames = [
+  //     'A1',
+  //     'A2',
+  //     'A3',
+  //     'A4',
+  //     'A5',
+  //     'A6',
+  //     'A7',
+  //     'A8',
+  //   ]
   
-    const freqs = [
-      0.16,
-      0.01,
-      0.13,
-      0.09,
-      0.41,
-      0.02,
-      0.14,
-      0.04,
-    ]
+  //   const freqs = [
+  //     0.16,
+  //     0.01,
+  //     0.13,
+  //     0.09,
+  //     0.41,
+  //     0.02,
+  //     0.14,
+  //     0.04,
+  //   ]
     
-    const ans = shannonFano(signNames, freqs);
-    console.log("シャノン・ファノ符号",ans);
-    const eff = efficiencyForShannonFanoCoding(ans,freqs);
-    console.log("能率:", eff);
-  }
+  //   const ans = shannonFano(signNames, freqs);
+  //   console.log("シャノン・ファノ符号",ans);
+  //   const eff = efficiencyForShannonFanoCoding(ans,freqs);
+  //   console.log("能率:", eff);
+  // }
 
-  test();
+  // test();
