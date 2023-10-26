@@ -108,25 +108,30 @@ function efficiencyForHuffmanCoding(houffman, freqs)
 
 
 // テスト(実行部分)
-// テストデータ - 文字と確率の配列
-const signNames = [
-  'A1',
-  'A2',
-  'A3',
-  'A4',
-  'A5',
-  'A6',
-]
-const freqs = [
-  0.09,
-  0.14,
-  0.40,
-  0.15,
-  0.11,
-  0.11,
-]
+function test()
+{
+  // テストデータ - 文字と確率の配列
+  const signNames = [
+    'A1',
+    'A2',
+    'A3',
+    'A4',
+    'A5',
+    'A6',
+  ]
+  const freqs = [
+    0.09,
+    0.14,
+    0.40,
+    0.15,
+    0.11,
+    0.11,
+  ]
+  
+  const ans = huffmanCoding(signNames, freqs);
+  console.log("ハフマン符号:", ans);
+  const eff = efficiencyForHuffmanCoding(ans,freqs);
+  console.log("能率:", eff);
+}
 
-const ans = huffmanCoding(signNames, freqs);
-console.log("ハフマン符号:", ans);
-const eff = efficiencyForHuffmanCoding(ans,freqs);
-console.log("能率:", eff);
+test();
