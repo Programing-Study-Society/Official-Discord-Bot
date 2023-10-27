@@ -20,6 +20,8 @@ module.exports = {
             sum += probabilities[i];
         }
 
+        sum = Math.floor(sum * Math.pow(10, 4)) / Math.pow(10, 4);
+
         if (sum !== 1) return NaN;
         if ((filterBy0.length > 0 && filterBy1.length !== 1) || filterBy0.length > 1) return NaN;
 
