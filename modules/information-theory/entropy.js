@@ -16,9 +16,9 @@ module.exports = {
 
         // 完全事象系以外を除外
         let sum = 0.0;
-        for(let i = 0; i < probabilities.length; i++) {
-            sum += probabilities[i];
-        }
+        probabilities.forEach(probability => {
+            sum += probability;
+        });
 
         sum = Math.floor(sum * Math.pow(10, 4)) / Math.pow(10, 4);
 

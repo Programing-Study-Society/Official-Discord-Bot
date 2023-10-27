@@ -15,10 +15,10 @@ const entropyFile = require('./entropy');
 module.exports = {
     efficiency: (codesLength, probabilities) => {
         // 完全事象系以外を除外
-        let sum = 0;
-        for(let i = 0; i < probabilities.length; i++) {
-            sum += probabilities[i];
-        }
+        let sum = 0.0;
+        probabilities.forEach(probability => {
+            sum += probability;
+        });
 
         sum = Math.floor(sum * Math.pow(10, 4)) / Math.pow(10, 4);
 
@@ -28,7 +28,7 @@ module.exports = {
         const entropyValue = entropyFile.entropy(probabilities);
 
         if (isNaN(meanSignLengthValue) || meanSignLengthValue === 0 || isNaN(entropyValue)) return NaN;
-        
+
         return entropyValue / meanSignLengthValue;
     },
 
