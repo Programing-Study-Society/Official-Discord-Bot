@@ -159,8 +159,7 @@ module.exports = {
                 })
                 const efficiencyValue = efficiency(codesLength ,probabilities); // 能率を求める
                 
-                if(
-                    efficiencyValue === 0 || efficiencyValue === NaN){
+                if(isNaN(efficiencyValue)){
                     return mInteraction.reply({ 
                         content: 'フォームに入力された値に不備があります。', 
                         ephemeral: true 
