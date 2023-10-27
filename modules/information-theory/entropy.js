@@ -13,13 +13,19 @@ module.exports = {
         
         const filterBy1 = probabilities.filter(ele => ele === 1);
         const filterBy0 = probabilities.filter(ele => ele === 0);
+        console.log(`filter 0 : ${filterBy0},\nfilter 1 : ${filterBy1}`);
 
         // 完全事象系以外を除外
-        let sum = 0;
+        let sum = 0.0;
         for(let i = 0; i < probabilities.length; i++) {
             sum += probabilities[i];
         }
-        if (sum !== 1) return NaN;
+
+        sum = Math.floor(sum * Math.pow(10, 4)) / Math.pow(10, 4)
+
+        console.log(`sum : ${sum}`);
+
+        if (sum != 1.0) return NaN;
         
         // 確率が0を含む場合
         if (filterBy0.length > 0) {

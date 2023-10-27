@@ -16,6 +16,7 @@ module.exports = {
     efficiency: (codesLength, probabilities) => {
         const meanSignLengthValue = meanSignLengthFile.meanSignLength(codesLength, probabilities);
         const entropyValue = entropyFile.entropy(probabilities);
+        console.log(`msl : ${meanSignLengthValue}, ent : ${entropyValue}`);
         if (isNaN(meanSignLengthValue) || meanSignLengthValue === 0 || isNaN(entropyValue)) return NaN;
         return entropyValue / meanSignLengthValue;
     },
@@ -64,7 +65,7 @@ module.exports = {
                 probabilities = probabilities.map((ele) => {
                     if(ele.match(/^[0-9]{1,}\/[0-9]{1,}$/)){
                         return Number(ele.split(/\//)[0]) / Number(ele.split(/\//)[1]);
-                    } else if (ele.match(/^[0-9]{1,}.[0-9]{1,}$/) || ele === '0' || ele === '1') {
+                    } else if (ele.match(/^[0-9]{1,}\.[0-9]{1,}$/) || ele === '0' || ele === '1') {
                         return Number(ele);
                     } else {
                         return NaN;
@@ -77,6 +78,8 @@ module.exports = {
                         ephemeral: true 
                     });
                 }
+
+                console.log(probabilities);
 
                 const efficiencyValue = module.exports.efficiency(codesLength, probabilities);
                 
