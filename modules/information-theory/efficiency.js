@@ -16,7 +16,6 @@ module.exports = {
     efficiency: (codesLength, probabilities) => {
         const meanSignLengthValue = meanSignLengthFile.meanSignLength(codesLength, probabilities);
         const entropyValue = entropyFile.entropy(probabilities);
-        console.log(`msl : ${meanSignLengthValue}, ent : ${entropyValue}`);
         if (isNaN(meanSignLengthValue) || meanSignLengthValue === 0 || isNaN(entropyValue)) return NaN;
         return entropyValue / meanSignLengthValue;
     },
@@ -79,8 +78,6 @@ module.exports = {
                     });
                 }
 
-                console.log(probabilities);
-
                 const efficiencyValue = module.exports.efficiency(codesLength, probabilities);
                 
                 if(isNaN(efficiencyValue)){
@@ -89,6 +86,7 @@ module.exports = {
                         ephemeral: true 
                     });
                 }else{
+                    console.log(`efficiency : ${efficiencyValue}`);
                     return mInteraction.reply({
                         embeds: [
                             new EmbedBuilder()

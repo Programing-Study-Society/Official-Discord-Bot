@@ -90,12 +90,13 @@ module.exports = {
 
                 const meanSignLengthValue = module.exports.meanSignLength(codesLength, probabilities);
                 
-                if( meanSignLengthValue == 0 || isNaN(meanSignLengthValue) ){
+                if( meanSignLengthValue < 1 || isNaN(meanSignLengthValue) ){
                     return mInteraction.reply({ 
                         content: 'フォームに入力された値に不備があります。', 
                         ephemeral: true 
                     });
                 }else{
+                    console.log(`mean sign length : ${meanSignLengthValue}`);
                     return mInteraction.reply({
                         embeds: [
                             new EmbedBuilder()
