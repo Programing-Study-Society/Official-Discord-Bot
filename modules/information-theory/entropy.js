@@ -8,21 +8,19 @@ const {
 } = require('discord.js');
 
 
+const {
+    isPerfectEventSystem,
+    optimizeProbabilities
+} = require('./info-theory-function');
+
+
 module.exports = {
-    entropy: (probabilities) => {
+    entropy: (arg_probabilities) => {
+
+        let probabilities = optimizeProbabilities(arg_probabilities);
         
         const filterBy1 = probabilities.filter(ele => ele === 1);
         const filterBy0 = probabilities.filter(ele => ele === 0);
-
-        // 完全事象系以外を除外
-        let sum = 0.0;
-        probabilities.forEach(probability => {
-            sum += probability;
-        });
-
-        sum = Math.floor(sum * Math.pow(10, 4)) / Math.pow(10, 4);
-
-        if (sum != 1.0) return NaN;
         
         // 確率が0を含む場合
         if (filterBy0.length > 0) {
@@ -32,6 +30,8 @@ module.exports = {
                 return NaN;
             }
         }
+
+        if (!isPerfectEventSystem(probabilities)) return NaN;
 
         let ent = 0.0;
         for(let i = 0; i < probabilities.length; i++) {
