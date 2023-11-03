@@ -10,7 +10,8 @@ const {
 
 const {
     isPerfectEventSystem,
-    optimizeProbabilities
+    optimizeProbabilities,
+    filterBy0and1
 } = require('./info-theory-function');
 
 
@@ -23,8 +24,12 @@ module.exports = {
 
         let probabilities = optimizeProbabilities(arg_probabilities);
 
+        const [filterBy0, filterBy1] = filterBy0and1(probabilities);
+
         // 完全事象系以外を除外
         if (!isPerfectEventSystem(probabilities)) return NaN;
+
+        if (filterBy0.length > 0 && filterBy1.length === 1) return 0;
 
         const meanSignLengthValue = meanSignLengthFile.meanSignLength(codesLength, probabilities);
         const entropyValue = entropyFile.entropy(probabilities);
