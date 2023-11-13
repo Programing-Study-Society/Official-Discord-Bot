@@ -1,20 +1,11 @@
 module.exports = {
-    optimizeProbabilities: (probabilities) => probabilities.map((ele) => Math.round(ele * 100000000)/100000000),
-
-    isPerfectEventSystem: (arg_probabilities) => {
-
-        let probabilities = module.exports.optimizeProbabilities(arg_probabilities);
-
+    isPerfectEventSystem: (probabilities) => {
         let sum = 0.0;
         probabilities.forEach(probability => {
             sum += probability;
         });
 
-        sum = Math.round(sum * 100000000) / 100000000;
-
-        console.log('sum : ' + sum);
-
-        if (sum !== 1.0) return false;
+        if (1.00000000005 < sum || sum < 0.99999999995) return false;
         else return true;
     },
 

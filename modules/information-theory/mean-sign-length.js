@@ -10,20 +10,12 @@ const {
 
 const {
     isPerfectEventSystem,
-    optimizeProbabilities
+    filterBy0and1
 } = require('./info-theory-function');
 
 
 module.exports = {
-    meanSignLength: (codesLength, arg_probabilities) => {
-
-        let probabilities = optimizeProbabilities(arg_probabilities);
-        
-        const filterBy1 = probabilities.filter(ele => ele === 1);
-        const filterBy0 = probabilities.filter(ele => ele === 0);
-
-        if ((filterBy0.length > 0 && filterBy1.length !== 1) || filterBy0.length > 1) return NaN;
-
+    meanSignLength: (codesLength, probabilities) => {
         // 完全事象系以外を除外
         if (!isPerfectEventSystem(probabilities)) return NaN;
 
@@ -31,6 +23,7 @@ module.exports = {
         for(let i = 0;i < probabilities.length; i++){
             L += codesLength[i] * probabilities[i];
         }
+        console.log("平均符号長 : " + L);
         return L;
     },
 

@@ -10,25 +10,17 @@ const {
 
 const {
     isPerfectEventSystem,
-    optimizeProbabilities
+    filterBy0and1
 } = require('./info-theory-function');
 
 
 module.exports = {
-    entropy: (arg_probabilities) => {
+    entropy: (probabilities) => {
+        const [filterBy0, filterBy1] = filterBy0and1(probabilities);
 
-        let probabilities = optimizeProbabilities(arg_probabilities);
-        
-        const filterBy1 = probabilities.filter(ele => ele === 1);
-        const filterBy0 = probabilities.filter(ele => ele === 0);
-        
-        // 確率が0を含む場合
-        if (filterBy0.length > 0) {
-            if (filterBy1.length === 1 && filterBy0.length === 1) {
-                return 0;
-            } else {
-                return NaN;
-            }
+        if (filterBy0.length > 0 ) {
+            if (filterBy1.length === 1) return 0;
+            else probabilities = probabilities.filter(ele => ele !== 0);
         }
 
         if (!isPerfectEventSystem(probabilities)) return NaN;
@@ -37,6 +29,8 @@ module.exports = {
         for(let i = 0; i < probabilities.length; i++) {
             ent -= (probabilities[i] * Math.log2(probabilities[i]));
         }
+
+        console.log('エントロピー : ' + ent);
         return ent;
     },
 
@@ -66,6 +60,8 @@ module.exports = {
         
                 let probabilities = inputProbabilities.split(/,\s{0,}/);
 
+                console.log(probabilities);
+
                 probabilities = probabilities.map((ele) => {
                     if(ele.match(/^[0-9]{1,}\/[0-9]{1,}$/)){
                         return Number(ele.split(/\//)[0]) / Number(ele.split(/\//)[1]);
@@ -75,6 +71,8 @@ module.exports = {
                         return NaN;
                     }
                 });
+
+                console.log(probabilities);
 
                 if (probabilities.includes(NaN)) {
                     return mInteraction.reply({ 

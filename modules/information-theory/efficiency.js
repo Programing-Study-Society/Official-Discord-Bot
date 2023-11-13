@@ -20,22 +20,23 @@ const entropyFile = require('./entropy');
 
 
 module.exports = {
-    efficiency: (codesLength, arg_probabilities) => {
-
-        let probabilities = optimizeProbabilities(arg_probabilities);
-
-        const [filterBy0, filterBy1] = filterBy0and1(probabilities);
-
+    efficiency: (codesLength, probabilities) => {
         // 完全事象系以外を除外
         if (!isPerfectEventSystem(probabilities)) return NaN;
 
-        if (filterBy0.length > 0 && filterBy1.length === 1) return 0;
+        const [filterBy0, filterBy1] = filterBy0and1(probabilities);
+
+        if (filterBy0.length > 0 ) {
+            if (filterBy1.length === 1) return 0;
+            else probabilities = probabilities.filter(ele => ele !== 0);
+        }
 
         const meanSignLengthValue = meanSignLengthFile.meanSignLength(codesLength, probabilities);
         const entropyValue = entropyFile.entropy(probabilities);
 
         if (isNaN(meanSignLengthValue) || meanSignLengthValue === 0 || isNaN(entropyValue)) return NaN;
 
+        console.log('能率 : ' + (entropyValue / meanSignLengthValue));
         return entropyValue / meanSignLengthValue;
     },
 
