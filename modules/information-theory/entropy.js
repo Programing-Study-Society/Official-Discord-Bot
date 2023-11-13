@@ -8,32 +8,29 @@ const {
 } = require('discord.js');
 
 
+const {
+    isPerfectEventSystem,
+    filterBy0and1
+} = require('./info-theory-function');
+
+
 module.exports = {
     entropy: (probabilities) => {
-        
-        const filterBy1 = probabilities.filter(ele => ele === 1);
-        const filterBy0 = probabilities.filter(ele => ele === 0);
+        const [filterBy0, filterBy1] = filterBy0and1(probabilities);
 
-        // 完全事象系以外を除外
-        let sum = 0;
-        for(let i = 0; i < probabilities.length; i++) {
-            sum += probabilities[i];
+        if (filterBy0.length > 0 ) {
+            if (filterBy1.length === 1) return 0;
+            else probabilities = probabilities.filter(ele => ele !== 0);
         }
-        if (sum !== 1) return NaN;
-        
-        // 確率が0を含む場合
-        if (filterBy0.length > 0) {
-            if (filterBy1.length === 1 && filterBy0.length === 1) {
-                return 0;
-            } else {
-                return NaN;
-            }
-        }
+
+        if (!isPerfectEventSystem(probabilities)) return NaN;
 
         let ent = 0.0;
         for(let i = 0; i < probabilities.length; i++) {
             ent -= (probabilities[i] * Math.log2(probabilities[i]));
         }
+
+        console.log('エントロピー : ' + ent);
         return ent;
     },
 
@@ -63,6 +60,8 @@ module.exports = {
         
                 let probabilities = inputProbabilities.split(/,\s{0,}/);
 
+                console.log(probabilities);
+
                 probabilities = probabilities.map((ele) => {
                     if(ele.match(/^[0-9]{1,}\/[0-9]{1,}$/)){
                         return Number(ele.split(/\//)[0]) / Number(ele.split(/\//)[1]);
@@ -72,6 +71,8 @@ module.exports = {
                         return NaN;
                     }
                 });
+
+                console.log(probabilities);
 
                 if (probabilities.includes(NaN)) {
                     return mInteraction.reply({ 
@@ -90,6 +91,7 @@ module.exports = {
                         ephemeral: true 
                     });
                 }else{
+                    console.log(`entropy : ${entropyValue}`);
                     return mInteraction.reply({
                         embeds: [
                             new EmbedBuilder()
