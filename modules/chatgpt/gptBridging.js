@@ -33,7 +33,7 @@ function removeTag(outputSentence) {
 }
 
 // gptBridging関数を非同期関数として宣言
-exports.gptBridging = async function(inputSentence) {
+exports.gptBridging = async function(channellid, inputSentence) {
 
   // 翻訳の対象外となるタグを格納する変数
   const ignoreList = '```ignore,###ignore';
@@ -55,7 +55,7 @@ exports.gptBridging = async function(inputSentence) {
   const inputSentence_EN_removeTag = await removeTag(inputSentence_EN_addTag);
 
   // ChatGPT_APIに入力ワード(英語)を送ってChatGPT_APIからの出力ワードを受け取る
-  const outputSentence_EN = await chatGPTAPIScript.sendToChatGPTAPI(inputSentence_EN_removeTag);
+  const outputSentence_EN = await chatGPTAPIScript.sendToChatGPTAPI(channellid, inputSentence_EN_removeTag);
 
   // 翻訳対象外の文字をタグで囲う
   const outputSentence_EN_addTag = await addTag(outputSentence_EN);

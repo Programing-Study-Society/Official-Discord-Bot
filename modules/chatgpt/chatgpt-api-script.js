@@ -18,6 +18,7 @@ const messages = {};
 
 // 辞書内のキーと値のペアを追加または更新する関数
 function addToDictionary(key, role, value) {
+  console.log(key,role,value);
   if (!messages[key]) {
     // キーが存在しない場合は、新しい配列を作成して値を追加
     messages[key] = [{role: role, content: value}];
@@ -54,6 +55,8 @@ exports.sendToChatGPTAPI = async function(channellid, inputSentence)
 {
   const key = channellid;// チャンネルIDを受け取る
   const sentence = inputSentence;// 送信されたメッセージを受け取る
+  console.log("inputSentence");
+  console.log(inputSentence);
 
   // 入力を配列に格納
   addToDictionary(channellid, "user", sentence);

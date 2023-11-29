@@ -62,7 +62,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 // ここからChatGPT用
 
 // 送信されたメッセージがChatGPT宛ならその処理へ送る関数
-client.on(Events.MessageCreate, (message) => {
+client.on(Events.MessageCreate, async(message) => {
 	console.log("\nメッセージの送信を検知。");
 	// 送信された文章の送信者がBotでなければ
     if (!message.author.bot)
@@ -75,15 +75,30 @@ client.on(Events.MessageCreate, (message) => {
 		console.log("\nBot以外の送信者からの文章を検知。チャンネル名:" + chName);		
 		console.log("メッセージ内容:" + message.content);
 
-		if(checkContent.startsWith("GPT")) sendMessage = content.slice(3);// 送信された文章の先頭がGPTなら
+		if (message.mentions.users.has(client.user.id)) sendMessage = message.content.replace(`<@${client.user.id}>`, ''); // 当Botがメンションされた場合、メンション部分を削除
+		else if(checkContent.startsWith("GPT")) sendMessage = content.slice(3);// 送信された文章の先頭がGPTなら
 		else if(checkContent.startsWith("CHATGPT")) sendMessage = content.slice(7);// 送信された文章の先頭がCHATGPTなら
 		else if(checkContent.startsWith("CHAT GPT")) sendMessage = content.slice(8);// 送信された文章の先頭がCHAT GPTなら
-		else
-		{
-			if(chName == "chat-gpt") sendMessage = content;//送信チャンネルが特定チャンネルなら
-			else if(message.channel.parent.name == "chat-gpt") sendMessage = "##Contents\n" + chName + "\n\n##Details\n" + content;//フォーラムの送信チャンネルが特定チャンネルなら
-			else return;//以上全てに一致しない(GPT宛てではないメッセージ)場合処理を終了
+		else if(chName == "chat-gpt") sendMessage = content;//送信チャンネルが特定チャンネルなら
+		else if(message.channel.parent.name == "chat-gpt") sendMessage = "##Contents\n" + chName + "\n\n##Details\n" + content;//フォーラムの送信チャンネルが特定チャンネルなら
+		else return;//以上全てに一致しない(GPT宛てではないメッセージ)場合処理を終了
+
+		// 返信先がある場合の処理
+		if (message.reference) {
+			// 返信先のメッセージIDを取得
+			const repliedMessageId = message.reference.messageId;
+	
+			try {
+				// 返信先のメッセージを取得
+				const repliedMessage = await message.channel.messages.fetch(repliedMessageId);
+	
+				// 返信先のメッセージの内容を追記する
+				sendMessage = repliedMessage.content + "\n\n" + sendMessage;
+			} catch (error) {
+				console.error('返信先の処理中にエラー:', error);
+			}
 		}
+		
 		console.log("\nキーワード一 or チャンネル一致");
 		//文字列が残っていればChatGPTのAPIに送る
 		if(sendMessage.length > 0)
@@ -94,19 +109,19 @@ client.on(Events.MessageCreate, (message) => {
     }
 });
 
-// メンションされたとき、その文章をChatGPTの処理へ送る関数
-client.on('messageCreate', message => {
-	// メンションされた&送信者がbotでなければ
-	if (message.mentions.users.has(client.user.id) && !message.author.bot)
-	{
-		// メッセージに含まれているメンション部分を削除
-		content = message.content.replace(`<@${client.user.id}>`, '');
+// // メンションされたとき、その文章をChatGPTの処理へ送る関数
+// client.on('messageCreate', message => {
+// 	// メンションされた&送信者がbotでなければ
+// 	if (message.mentions.users.has(client.user.id) && !message.author.bot)
+// 	{
+// 		// メッセージに含まれているメンション部分を削除
+// 		content = message.content.replace(`<@${client.user.id}>`, '');
 
-		// もしメッセージが空でなければChatGPTのAPIに送る
-		if(content != "")
-			sentenceSendAndReceive(content, message)
-	}
-})
+// 		// もしメッセージが空でなければChatGPTのAPIに送る
+// 		if(content.length > 0)
+// 			sentenceSendAndReceive(content, message)
+// 	}
+// })
 
 // 入力された文章をChatGPTのAPIに送信して、返答をDiscordに送信する関数
 async function sentenceSendAndReceive(inputSentence, message)
@@ -121,8 +136,9 @@ async function sentenceSendAndReceive(inputSentence, message)
 	msg.channel.sendTyping();
 
 	// 入力された文章をChatGPTのAPIに送信して、返答を受け取る
-	replySentence = await gptBridgingScript.gptBridging(sendSentence);
-	console.log("\n投稿先のチャンネル:" + msg.channel.name);
+	replySentence = await gptBridgingScript.gptBridging(msg.channel.id, sendSentence);
+	console.log("\n投稿先のチャンネルname:" + msg.channel.name);
+	console.log("投稿先のチャンネルid:" + msg.channel.id);
 
 	// ChatGPTからの返答をDiscordに送信
 	msg.reply(replySentence);
