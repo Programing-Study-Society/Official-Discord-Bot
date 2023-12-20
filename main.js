@@ -16,7 +16,8 @@ const modules = [
 	require('./modules/translation'), 
 	require('./modules/count'), 
 	require('./command/log-deletion.js'), 
-	require('./command/log-deletion-all.js')
+	require('./command/log-deletion-all.js'),
+    require('./modules/akinator/akinator-main.js'),
 ];
 
 
@@ -76,9 +77,9 @@ client.on(Events.MessageCreate, async(message) => {
 		console.log("メッセージ内容:" + message.content);
 
 		if (message.mentions.users.has(client.user.id)) sendMessage = message.content.replace(`<@${client.user.id}>`, ''); // 当Botがメンションされた場合、メンション部分を削除
-		else if(checkContent.startsWith("GPT")) sendMessage = content.slice(3);// 送信された文章の先頭がGPTなら
-		else if(checkContent.startsWith("CHATGPT")) sendMessage = content.slice(7);// 送信された文章の先頭がCHATGPTなら
-		else if(checkContent.startsWith("CHAT GPT")) sendMessage = content.slice(8);// 送信された文章の先頭がCHAT GPTなら
+		// else if(checkContent.startsWith("GPT")) sendMessage = content.slice(3);// 送信された文章の先頭がGPTなら
+		// else if(checkContent.startsWith("CHATGPT")) sendMessage = content.slice(7);// 送信された文章の先頭がCHATGPTなら
+		// else if(checkContent.startsWith("CHAT GPT")) sendMessage = content.slice(8);// 送信された文章の先頭がCHAT GPTなら
 		else if(chName == "chat-gpt") sendMessage = content;//送信チャンネルが特定チャンネルなら
 		else if(message.channel.parent.name == "chat-gpt") sendMessage = "##Contents\n" + chName + "\n\n##Details\n" + content;//フォーラムの送信チャンネルが特定チャンネルなら
 		else return;//以上全てに一致しない(GPT宛てではないメッセージ)場合処理を終了
