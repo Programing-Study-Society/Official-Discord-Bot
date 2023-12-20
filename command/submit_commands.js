@@ -12,7 +12,8 @@ const commands = [
     require('../modules/translation.js').data.toJSON(), 
     require('../modules/count.js').data.toJSON(), 
     require('./log-deletion.js').data.toJSON(), 
-    require('./log-deletion-all.js').data.toJSON()
+    require('./log-deletion-all.js').data.toJSON(),
+    require('../modules/akinator/akinator-main.js').data.toJSON(), 
 ];
 
 
