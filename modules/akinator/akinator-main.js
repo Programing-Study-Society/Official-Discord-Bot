@@ -50,8 +50,8 @@ async function answersSend(aki, question, interaction)
                 question = await aki.step(select);
             }
 
-            // 確信度が75%を超える or 質問回数が20回以上で終了
-            if(aki.progress <= 75 && aki.currentStep < 20)
+            // 確信度が85%を超える or 質問回数が30回以上で終了
+            if(aki.progress <= 85 && aki.currentStep < 30)
             {
                 await questionSend(aki, question, interaction);    // 質問を投稿する
             }
@@ -59,15 +59,18 @@ async function answersSend(aki, question, interaction)
             {
                 const result = await aki.win();
                 // console.log('win:', result.guesses);
-                await interaction.channel.send(`あなたが想像しているのは「${result.guesses[0].name}」`);
-                // 画像を送信
-                interaction.channel.send({
-                    embeds: [{
-                        image: {
-                        url: result.guesses[0].absolute_picture_path
-                        }
-                    }]
-                })
+                await interaction.channel.send(`あなたが想像しているのは`);
+                for(let i = 0; i < 3; i++)
+                {
+                    await interaction.channel.send({
+                        content: `候補${i + 1}位「${result.guesses[i].name}」`,
+                        embeds: [{
+                            image: {
+                                url: result.guesses[i].absolute_picture_path
+                            }
+                        }]
+                    });
+                }
             }
 
             // 一度メッセージが収集されたら、コレクターを手動で終了
