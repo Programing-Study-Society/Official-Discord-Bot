@@ -30,7 +30,7 @@ async function answersSend(aki, question, interaction)
      // 同チャンネルに入力されたチャットを取得する
     const FAILURE_ADMISSIBLE_NUM = 3;
 	const filter = (response) => response.author.id === interaction.user.id;
-	const collector = await interaction.channel.createMessageCollector({ filter, time: 10000 }); // タイムアウト 60秒
+	const collector = await interaction.channel.createMessageCollector({ filter, time: 60000 }); // タイムアウト 60秒
     let missType = 0;
 
     // メッセージが取得できたら
