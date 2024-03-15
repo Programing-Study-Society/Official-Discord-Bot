@@ -43,7 +43,10 @@ async function answersSend(aki, question, interaction)
             interaction.channel.sendTyping(); // 入力中…を表示
             if(select === -1)
             {
-                question = await aki.back();
+                if (aki.currentStep > 1) 
+                {
+                    question = await aki.back();
+                }
             }
             else
             {
