@@ -14,6 +14,6 @@ module.exports = {
         const replyUsers = users.map((user) => interaction.options.getUser(user))
                         .filter((result) => result !== null);
         const randomIndex = Math.floor(Math.random() * replyUsers.length);
-        await interaction.reply(`選ばれたのは${replyUsers[randomIndex]}でした`);
+        await interaction.reply(`${replyUsers}\nの中から選ばれたのは\n${replyUsers[randomIndex]}`);
     },
 };
