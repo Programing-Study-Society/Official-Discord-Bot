@@ -18,12 +18,13 @@ module.exports = {
         const replyUsers = users.map((user) => interaction.options.getUser(user))
                         .filter((result) => result !== null);
         teamNumber = interaction.options.getNumber('team-number');
-        text = createTeams(replyUsers, teamNumber);
+        text = createTeams(interaction, replyUsers, teamNumber);
         await interaction.reply(text);
     },
 };
 
-function createTeams(members, teamNumber) {
+function createTeams(interaction, members, teamNumber) {
+    const roleManagement = require('./role-management');
     members.sort(() => (Math.random() - 0.5));
     let teams = [];
     const length = members.length;
@@ -36,6 +37,7 @@ function createTeams(members, teamNumber) {
         let teamString = teamName + "\n> ";
         teamString += teamMembers.join("\n> ");
         teams.push(teamString);
+        roleManagement.roleAdd(interaction, teamMembers, teamName);
     }
     return teams.join("\n");
 }

@@ -17,6 +17,7 @@ const commands = [
     require('../modules/random-choice.js').data.toJSON(), 
     require('../modules/random-team.js').data.toJSON(), 
     require('../modules/random-team-remainder.js').data.toJSON(), 
+    require('./role-delete.js').data.toJSON(), 
 ];
 
 
