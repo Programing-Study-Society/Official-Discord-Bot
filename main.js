@@ -18,6 +18,10 @@ const modules = [
 	require('./command/log-deletion.js'), 
 	require('./command/log-deletion-all.js'),
     require('./modules/akinator/akinator-main.js'),
+    require('./modules/random-choice.js'),
+	require('./modules/random-team.js'),
+	require('./modules/random-team-remainder.js'),
+	require('./command/role-delete.js'),
 ];
 
 
@@ -57,8 +61,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
         }
     });
 });
-
-
 
 // ここからChatGPT用
 

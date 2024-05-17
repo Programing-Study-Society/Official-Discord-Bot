@@ -14,6 +14,10 @@ const commands = [
     require('./log-deletion.js').data.toJSON(), 
     require('./log-deletion-all.js').data.toJSON(),
     require('../modules/akinator/akinator-main.js').data.toJSON(), 
+    require('../modules/random-choice.js').data.toJSON(), 
+    require('../modules/random-team.js').data.toJSON(), 
+    require('../modules/random-team-remainder.js').data.toJSON(), 
+    require('./role-delete.js').data.toJSON(), 
 ];
 
 
